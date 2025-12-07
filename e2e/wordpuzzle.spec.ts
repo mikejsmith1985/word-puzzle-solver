@@ -45,9 +45,9 @@ test.describe('Word Puzzle Solver', () => {
     // Input letters
     await page.locator('input[placeholder="e.g., ABCDEF"]').fill('STARE');
     
-    // Set specific length
-    await page.locator('#minLen').fill('5');
-    await page.locator('#maxLen').fill('5');
+    // Set specific length using buttons
+    await page.locator('button:has-text("5")').first().click(); // Min length button
+    await page.locator('button:has-text("5")').last().click();  // Max length button
     
     // Search
     await page.locator('button:has-text("Search")').click();
@@ -112,8 +112,8 @@ test.describe('Word Puzzle Solver', () => {
   test('should clear all button work', async ({ page }) => {
     // Fill in data
     await page.locator('input[placeholder="e.g., ABCDEF"]').fill('ABCDEF');
-    await page.locator('#minLen').fill('2');
-    await page.locator('#maxLen').fill('4');
+    await page.locator('button:has-text("3")').first().click();   // Min length
+    await page.locator('button:has-text("4")').last().click();    // Max length
     
     const constraintInputs = page.locator('.constraint-box input');
     await constraintInputs.nth(0).fill('A');
@@ -123,8 +123,14 @@ test.describe('Word Puzzle Solver', () => {
     
     // Verify everything is cleared
     await expect(page.locator('input[placeholder="e.g., ABCDEF"]')).toHaveValue('');
-    await expect(page.locator('#minLen')).toHaveValue('3');
-    await expect(page.locator('#maxLen')).toHaveValue('6');
+    
+    // Verify min/max buttons are reset to defaults
+    const minButtonsActive = page.locator('.button-group-horizontal').first().locator('.btn-length.active');
+    const maxButtonsActive = page.locator('.button-group-horizontal').last().locator('.btn-length.active');
+    const minText = await minButtonsActive.first().textContent();
+    const maxText = await maxButtonsActive.last().textContent();
+    expect(minText?.trim()).toBe('3');
+    expect(maxText?.trim()).toBe('6');
     
     const allConstraints = page.locator('.constraint-box input');
     for (let i = 0; i < 6; i++) {

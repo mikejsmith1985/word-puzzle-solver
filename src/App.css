@@ -84,14 +84,16 @@ body {
 
 .input-section input {
   width: 100%;
-  padding: 0.75rem;
-  font-size: 1rem;
+  padding: 1rem;
+  font-size: 1.1rem;
   border: 2px solid var(--border-color);
   border-radius: 8px;
   transition: border-color 0.3s;
   font-weight: 600;
   letter-spacing: 2px;
   text-transform: uppercase;
+  min-height: 50px;
+  touch-action: manipulation;
 }
 
 .input-section input:focus {
@@ -107,7 +109,12 @@ body {
   margin-bottom: 1.5rem;
 }
 
-.length-input label {
+.length-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.length-group label {
   display: block;
   font-weight: 600;
   margin-bottom: 0.5rem;
@@ -115,19 +122,40 @@ body {
   font-size: 0.9rem;
 }
 
-.length-input input {
-  width: 100%;
-  padding: 0.65rem;
-  font-size: 0.95rem;
-  border: 2px solid var(--border-color);
-  border-radius: 8px;
-  transition: border-color 0.3s;
+.button-group-horizontal {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.5rem;
 }
 
-.length-input input:focus {
-  outline: none;
+.btn-length {
+  padding: 0.75rem 0.5rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  border: 2px solid var(--border-color);
+  background: var(--bg-white);
+  color: var(--text-primary);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s;
+  min-height: 45px;
+  touch-action: manipulation;
+}
+
+.btn-length:active {
+  transform: scale(0.95);
+}
+
+.btn-length.active {
+  background: var(--primary-color);
+  color: var(--bg-white);
   border-color: var(--primary-color);
-  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+}
+
+.btn-length:hover {
+  border-color: var(--primary-color);
+  background: rgba(99, 102, 241, 0.05);
 }
 
 .constraints-section {
@@ -143,33 +171,38 @@ body {
 
 .constraints-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
   gap: 0.75rem;
 }
 
 .constraint-box {
   display: flex;
   flex-direction: column;
+  align-items: center;
 }
 
 .constraint-box label {
-  font-size: 0.75rem;
-  font-weight: 600;
+  font-size: 0.8rem;
+  font-weight: 700;
   color: var(--text-secondary);
-  margin-bottom: 0.25rem;
+  margin-bottom: 0.5rem;
   text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .constraint-box input {
-  padding: 0.6rem;
-  font-size: 0.95rem;
+  width: 100%;
+  padding: 0.75rem;
+  font-size: 1rem;
   border: 2px solid var(--border-color);
-  border-radius: 6px;
+  border-radius: 8px;
   text-align: center;
   font-weight: bold;
   letter-spacing: 1px;
   text-transform: uppercase;
-  transition: border-color 0.3s;
+  transition: all 0.3s;
+  min-height: 45px;
+  touch-action: manipulation;
 }
 
 .constraint-box input:focus {
@@ -185,7 +218,7 @@ body {
 }
 
 .btn {
-  padding: 0.75rem 1.5rem;
+  padding: 0.85rem 1.5rem;
   font-size: 0.95rem;
   font-weight: 600;
   border: none;
@@ -194,6 +227,11 @@ body {
   transition: all 0.3s;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  min-height: 48px;
+  min-width: 48px;
+  touch-action: manipulation;
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 .btn-primary {
@@ -308,12 +346,48 @@ body {
     padding: 1.5rem;
   }
 
-  .results-grid {
-    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  .input-section input {
+    font-size: 1.2rem;
+    padding: 1.2rem;
+  }
+
+  .button-group-horizontal {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.6rem;
+  }
+
+  .btn-length {
+    min-height: 50px;
+    font-size: 1rem;
   }
 
   .constraints-grid {
     grid-template-columns: repeat(3, 1fr);
+    gap: 0.6rem;
+  }
+
+  .constraint-box input {
+    min-height: 50px;
+    font-size: 1.1rem;
+  }
+
+  .button-group {
+    grid-template-columns: 1fr;
+    gap: 0.8rem;
+  }
+
+  .btn {
+    min-height: 52px;
+    font-size: 1rem;
+    padding: 1rem;
+  }
+
+  .btn-primary:active {
+    transform: scale(0.98);
+  }
+
+  .results-grid {
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
   }
 }
 

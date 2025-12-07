@@ -48,6 +48,14 @@ function App() {
     setConstraints(prev => prev.map(c => ({ ...c, character: '' })));
   };
 
+  const setMinLengthButton = (value: number) => {
+    setMinLength(String(value));
+  };
+
+  const setMaxLengthButton = (value: number) => {
+    setMaxLength(String(value));
+  };
+
   const handleClearAll = () => {
     setLetters('');
     setMinLength('3');
@@ -86,27 +94,33 @@ function App() {
         </div>
 
         <div className="length-section">
-          <div className="length-input">
-            <label htmlFor="minLen">Min Length:</label>
-            <input
-              id="minLen"
-              type="number"
-              value={minLength}
-              onChange={e => setMinLength(e.target.value)}
-              min="1"
-              max="6"
-            />
+          <div className="length-group">
+            <label>Min Length:</label>
+            <div className="button-group-horizontal">
+              {[3, 4, 5, 6].map(num => (
+                <button
+                  key={`min-${num}`}
+                  className={`btn btn-length ${minLength === String(num) ? 'active' : ''}`}
+                  onClick={() => setMinLengthButton(num)}
+                >
+                  {num}
+                </button>
+              ))}
+            </div>
           </div>
-          <div className="length-input">
-            <label htmlFor="maxLen">Max Length:</label>
-            <input
-              id="maxLen"
-              type="number"
-              value={maxLength}
-              onChange={e => setMaxLength(e.target.value)}
-              min="1"
-              max="6"
-            />
+          <div className="length-group">
+            <label>Max Length:</label>
+            <div className="button-group-horizontal">
+              {[3, 4, 5, 6].map(num => (
+                <button
+                  key={`max-${num}`}
+                  className={`btn btn-length ${maxLength === String(num) ? 'active' : ''}`}
+                  onClick={() => setMaxLengthButton(num)}
+                >
+                  {num}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
 

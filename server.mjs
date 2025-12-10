@@ -9,8 +9,8 @@ const __dirname = path.dirname(__filename);
 const app = express();
 const PORT = 8085;
 
-// Serve static files from dist
-const distPath = path.join(process.cwd(), 'dist');
+// Serve static files from dist (relative to __dirname for executables)
+const distPath = path.join(__dirname, 'dist');
 app.use(express.static(distPath));
 
 // Fallback to index.html for SPA routing

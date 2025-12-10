@@ -58,7 +58,7 @@ You now have a **completely self-contained executable** that:
 npm run build
 
 # 2. Package with pkg as Windows executable
-pkg --targets node18-win-x64 --output dist/WordPuzzleSolver.exe server.mjs
+pkg --targets node20-win-x64 --output dist/WordPuzzleSolver.exe server.mjs
 ```
 
 ### Or Run the Complete Build Command:
@@ -204,7 +204,7 @@ WordPuzzleSolver.exe
 
 ### Prerequisites
 ```bash
-# Install Node.js 18+ from nodejs.org
+# Install Node.js 20+ from nodejs.org
 # Install dependencies
 npm install
 ```

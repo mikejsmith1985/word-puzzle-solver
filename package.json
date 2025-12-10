@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "build:exe": "npm run build && pkg --targets node18-win-x64 --output dist/WordPuzzleSolver.exe server.mjs",
+    "build:exe": "npm run build && pkg --targets node18-win-x64 --output dist/WordPuzzleSolver.exe server.cjs",
     "lint": "eslint .",
     "preview": "vite preview",
     "test": "playwright test",
@@ -41,7 +41,7 @@
       "dist/**/*"
     ],
     "scripts": [
-      "server.mjs"
+      "server.cjs"
     ],
     "targets": [
       "node18-win-x64"

@@ -3,12 +3,11 @@
   "private": true,
   "version": "1.0.0",
   "type": "module",
-  "main": "dist-electron/main.js",
   "homepage": "./",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "build:exe": "npm run build && pkg --targets win-x64 --output dist/WordPuzzleSolver.exe server.mjs",
+    "build:exe": "npm run build && pkg --targets node18-win-x64 --output dist/WordPuzzleSolver.exe server.mjs",
     "lint": "eslint .",
     "preview": "vite preview",
     "test": "playwright test",
@@ -28,10 +27,6 @@
     "@types/react": "^19.2.5",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^5.1.1",
-    "concurrently": "^9.0.0",
-    "electron": "^39.2.6",
-    "electron-builder": "^26.0.12",
-    "electron-is-dev": "^3.0.1",
     "eslint": "^9.39.1",
     "eslint-plugin-react-hooks": "^7.0.1",
     "eslint-plugin-react-refresh": "^0.4.24",
@@ -39,46 +34,7 @@
     "pkg": "^5.8.1",
     "typescript": "~5.9.3",
     "typescript-eslint": "^8.46.4",
-    "vite": "^7.2.4",
-    "wait-on": "^7.2.0"
-  },
-  "build": {
-    "appId": "com.wordpuzzlesolver.app",
-    "productName": "Word Puzzle Solver",
-    "files": [
-      "dist/**/*",
-      "dist-electron/**/*",
-      "node_modules/**/*",
-      "package.json"
-    ],
-    "directories": {
-      "buildResources": "assets"
-    },
-    "win": {
-      "target": [
-        {
-          "target": "nsis",
-          "arch": [
-            "x64"
-          ]
-        },
-        {
-          "target": "portable",
-          "arch": [
-            "x64"
-          ]
-        }
-      ]
-    },
-    "nsis": {
-      "oneClick": false,
-      "allowToChangeInstallationDirectory": true,
-      "createDesktopShortcut": true,
-      "createStartMenuShortcut": true
-    },
-    "portable": {
-      "artifactName": "${productName}-${version}-portable.exe"
-    }
+    "vite": "^7.2.4"
   },
   "pkg": {
     "assets": [
@@ -88,7 +44,7 @@
       "server.mjs"
     ],
     "targets": [
-      "win-x64"
+      "node18-win-x64"
     ],
     "outputPath": "dist"
   }

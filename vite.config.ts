@@ -8,4 +8,8 @@ export default defineConfig({
     port: 8085,
     host: true,
   },
+  build: {
+    outDir: 'dist',
+    emptyOutDir: true,
+  }
 })

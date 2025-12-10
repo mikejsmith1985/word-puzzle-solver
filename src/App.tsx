@@ -8,6 +8,7 @@ function App() {
   const [letters, setLetters] = useState('');
   const [minLength, setMinLength] = useState('3');
   const [maxLength, setMaxLength] = useState('6');
+  const [syncLengths, setSyncLengths] = useState(false);
   const [constraints, setConstraints] = useState<ConstraintSet[]>([
     { position: 1, character: '' },
     { position: 2, character: '' },
@@ -50,10 +51,16 @@ function App() {
 
   const setMinLengthButton = (value: number) => {
     setMinLength(String(value));
+    if (syncLengths) {
+      setMaxLength(String(value));
+    }
   };
 
   const setMaxLengthButton = (value: number) => {
     setMaxLength(String(value));
+    if (syncLengths) {
+      setMinLength(String(value));
+    }
   };
 
   const handleClearAll = () => {
@@ -94,6 +101,17 @@ function App() {
         </div>
 
         <div className="length-section">
+          <div className="length-header">
+            <h3>Word Length</h3>
+            <label className="sync-toggle">
+              <input
+                type="checkbox"
+                checked={syncLengths}
+                onChange={e => setSyncLengths(e.target.checked)}
+              />
+              <span>Sync Min/Max</span>
+            </label>
+          </div>
           <div className="length-group">
             <label>Min Length:</label>
             <div className="button-group-horizontal">

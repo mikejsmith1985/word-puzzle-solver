@@ -1,0 +1,88 @@
+name: Build and Release Executable
+
+on:
+  push:
+    branches: [ master, main ]
+    tags:
+      - 'v*'
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+    
+    permissions:
+      contents: write
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+        timeout-minutes: 10
+      
+      - name: Run tests
+        run: npm test -- --reporter=line
+        timeout-minutes: 5
+        continue-on-error: true
+      
+      - name: Build application
+        run: npm run build
+        timeout-minutes: 5
+      
+      - name: Create executable with pkg
+        run: npm run build:exe
+        timeout-minutes: 15
+      
+      - name: Check if executable was created
+        run: |
+          if [ ! -f dist/WordPuzzleSolver.exe ]; then
+            echo "Error: Executable not found!"
+            exit 1
+          fi
+          ls -lh dist/WordPuzzleSolver.exe
+      
+      - name: Generate version
+        id: version
+        run: |
+          VERSION=$(node -e "console.log(require('./package.json').version)")
+          TIMESTAMP=$(date +%Y%m%d_%H%M%S)
+          echo "version=${VERSION}" >> $GITHUB_OUTPUT
+          echo "timestamp=${TIMESTAMP}" >> $GITHUB_OUTPUT
+          echo "release_tag=v${VERSION}-${TIMESTAMP}" >> $GITHUB_OUTPUT
+      
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: dist/WordPuzzleSolver.exe
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Create/Update Auto-Release (non-tagged push)
+        if: ${{ !startsWith(github.ref, 'refs/tags/') }}
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: latest-build
+          name: Latest Build - ${{ steps.version.outputs.timestamp }}
+          files: dist/WordPuzzleSolver.exe
+          draft: false
+          prerelease: true
+          generate_release_notes: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: WordPuzzleSolver
+          path: dist/WordPuzzleSolver.exe
+          retention-days: 90

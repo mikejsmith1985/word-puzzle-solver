@@ -5,7 +5,8 @@ const open = require('open');
 const app = express();
 const PORT = 8085;
 
-// Serve static files from dist (relative to __dirname for executables)
+// Serve static files from dist
+// In pkg executables, __dirname points to the snapshot location where assets are extracted
 const distPath = path.join(__dirname, 'dist');
 app.use(express.static(distPath));
 

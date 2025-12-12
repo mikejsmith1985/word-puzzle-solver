@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Sync Toggle Feature', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('http://localhost:4175');
+    await page.goto('/');
     await page.waitForLoadState('networkidle');
   });
 
@@ -12,16 +12,20 @@ test.describe('Sync Toggle Feature', () => {
   });
 
   test('when sync is OFF, min and max can be set independently', async ({ page }) => {
-    // Get all length buttons (min and max)
-    const minButtons = page.locator('text=Min Length >> .. >> button');
-    const maxButtons = page.locator('text=Max Length >> .. >> button');
+    // Ensure sync is OFF
+    const syncCheckbox = page.locator('input[type="checkbox"]');
+    const isChecked = await syncCheckbox.isChecked();
+    if (isChecked) {
+      await syncCheckbox.click();
+    }
     
-    // Find and click min=3
-    await page.click('button:has-text("3")');
+    // Click min=4 and max=6 independently
+    await page.click('text=Min Length >> .. >> button:has-text("4")');
+    await page.click('text=Max Length >> .. >> button:has-text("6")');
     
-    // Verify we can set different values independently
-    const buttons = page.locator('.btn-length');
-    expect(buttons.length).toBeGreaterThan(0);
+    // Verify buttons are active
+    await expect(page.locator('text=Min Length >> .. >> button:has-text("4").active')).toBeVisible();
+    await expect(page.locator('text=Max Length >> .. >> button:has-text("6").active')).toBeVisible();
   });
 
   test('when sync is ON, clicking min sets max to same value', async ({ page }) => {

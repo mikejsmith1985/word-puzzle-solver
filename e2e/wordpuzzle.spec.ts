@@ -13,8 +13,10 @@ test.describe('Word Puzzle Solver', () => {
 
   test('should have all input fields visible', async ({ page }) => {
     await expect(page.locator('input[placeholder="e.g., ABCDEF"]')).toBeVisible();
-    await expect(page.locator('#minLen')).toBeVisible();
-    await expect(page.locator('#maxLen')).toBeVisible();
+    
+    // Check that min/max length buttons are visible
+    await expect(page.locator('text=Min Length')).toBeVisible();
+    await expect(page.locator('text=Max Length')).toBeVisible();
     
     // Check that all 6 position constraint inputs are present
     const positionInputs = page.locator('.constraint-box input');

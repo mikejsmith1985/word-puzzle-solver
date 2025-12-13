@@ -123,6 +123,18 @@ body {
   color: var(--text-primary);
 }
 
+.length-desktop {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.length-mobile {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
 .sync-toggle {
   display: flex;
   align-items: center;
@@ -369,6 +381,14 @@ body {
 }
 
 @media (max-width: 768px) {
+  .length-section {
+    grid-template-columns: 1fr;
+  }
+
+  .length-mobile {
+    grid-column: auto;
+  }
+
   .container {
     padding: 1rem;
   }

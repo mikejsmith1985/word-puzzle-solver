@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { loadWords, filterWords, type SearchParams, type ConstraintSet } from './utils/wordFilter';
+import { useIsMobile } from './useIsMobile';
 import './App.css';
 
 function App() {
@@ -8,7 +9,9 @@ function App() {
   const [letters, setLetters] = useState('');
   const [minLength, setMinLength] = useState('3');
   const [maxLength, setMaxLength] = useState('6');
+  const [wordLength, setWordLength] = useState('4');
   const [syncLengths, setSyncLengths] = useState(false);
+  const isMobile = useIsMobile();
   const [constraints, setConstraints] = useState<ConstraintSet[]>([
     { position: 1, character: '' },
     { position: 2, character: '' },
@@ -27,14 +30,26 @@ function App() {
   }, []);
 
   const handleSearch = () => {
-    const params: SearchParams = {
-      availableLetters: letters,
-      minLength: parseInt(minLength) || 1,
-      maxLength: parseInt(maxLength) || 6,
-      constraints: constraints.filter(c => c.character.trim()),
-    };
-    const filtered = filterWords(words, params);
-    setResults(filtered.sort((a, b) => a.length - b.length || a.localeCompare(b)));
+    if (isMobile) {
+      const length = parseInt(wordLength) || 4;
+      const params: SearchParams = {
+        availableLetters: letters,
+        minLength: length,
+        maxLength: length,
+        constraints: constraints.filter(c => c.character.trim()),
+      };
+      const filtered = filterWords(words, params);
+      setResults(filtered.sort((a, b) => a.length - b.length || a.localeCompare(b)));
+    } else {
+      const params: SearchParams = {
+        availableLetters: letters,
+        minLength: parseInt(minLength) || 1,
+        maxLength: parseInt(maxLength) || 6,
+        constraints: constraints.filter(c => c.character.trim()),
+      };
+      const filtered = filterWords(words, params);
+      setResults(filtered.sort((a, b) => a.length - b.length || a.localeCompare(b)));
+    }
   };
 
   const handleConstraintChange = (position: number, character: string) => {
@@ -67,6 +82,7 @@ function App() {
     setLetters('');
     setMinLength('3');
     setMaxLength('6');
+    setWordLength('4');
     handleClearConstraints();
     setResults([]);
   };
@@ -103,43 +119,67 @@ function App() {
         <div className="length-section">
           <div className="length-header">
             <h3>Word Length</h3>
-            <label className="sync-toggle">
-              <input
-                type="checkbox"
-                checked={syncLengths}
-                onChange={e => setSyncLengths(e.target.checked)}
-              />
-              <span>Sync Min/Max</span>
-            </label>
+            {!isMobile && (
+              <label className="sync-toggle">
+                <input
+                  type="checkbox"
+                  checked={syncLengths}
+                  onChange={e => setSyncLengths(e.target.checked)}
+                />
+                <span>Sync Min/Max</span>
+              </label>
+            )}
           </div>
-          <div className="length-group">
-            <label>Min Length:</label>
-            <div className="button-group-horizontal">
-              {[3, 4, 5, 6].map(num => (
-                <button
-                  key={`min-${num}`}
-                  className={`btn btn-length ${minLength === String(num) ? 'active' : ''}`}
-                  onClick={() => setMinLengthButton(num)}
-                >
-                  {num}
-                </button>
-              ))}
+          {!isMobile && (
+            <div className="length-desktop">
+              <div className="length-group">
+                <label>Min Length:</label>
+                <div className="button-group-horizontal">
+                  {[3, 4, 5, 6].map(num => (
+                    <button
+                      key={`min-${num}`}
+                      className={`btn btn-length ${minLength === String(num) ? 'active' : ''}`}
+                      onClick={() => setMinLengthButton(num)}
+                    >
+                      {num}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <div className="length-group">
+                <label>Max Length:</label>
+                <div className="button-group-horizontal">
+                  {[3, 4, 5, 6].map(num => (
+                    <button
+                      key={`max-${num}`}
+                      className={`btn btn-length ${maxLength === String(num) ? 'active' : ''}`}
+                      onClick={() => setMaxLengthButton(num)}
+                    >
+                      {num}
+                    </button>
+                  ))}
+                </div>
+              </div>
             </div>
-          </div>
-          <div className="length-group">
-            <label>Max Length:</label>
-            <div className="button-group-horizontal">
-              {[3, 4, 5, 6].map(num => (
-                <button
-                  key={`max-${num}`}
-                  className={`btn btn-length ${maxLength === String(num) ? 'active' : ''}`}
-                  onClick={() => setMaxLengthButton(num)}
-                >
-                  {num}
-                </button>
-              ))}
+          )}
+          {isMobile && (
+            <div className="length-mobile">
+              <div className="length-group">
+                <label>Word Length:</label>
+                <div className="button-group-horizontal">
+                  {[3, 4, 5, 6].map(num => (
+                    <button
+                      key={`length-${num}`}
+                      className={`btn btn-length ${wordLength === String(num) ? 'active' : ''}`}
+                      onClick={() => setWordLength(String(num))}
+                    >
+                      {num}
+                    </button>
+                  ))}
+                </div>
+              </div>
             </div>
-          </div>
+          )}
         </div>
 
         <div className="constraints-section">

@@ -123,6 +123,11 @@ body {
   color: var(--text-primary);
 }
 
+.length-toggles {
+  display: flex;
+  gap: 1.5rem;
+}
+
 .length-desktop {
   grid-column: 1 / -1;
   display: grid;

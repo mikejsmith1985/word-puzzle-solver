@@ -11,6 +11,10 @@ function App() {
   const [maxLength, setMaxLength] = useState('6');
   const [wordLength, setWordLength] = useState('4');
   const [syncLengths, setSyncLengths] = useState(false);
+  const [autoClear, setAutoClear] = useState(() => {
+    const saved = localStorage.getItem('autoClear');
+    return saved !== null ? JSON.parse(saved) : false;
+  });
   const isMobile = useIsMobile();
   const [constraints, setConstraints] = useState<ConstraintSet[]>([
     { position: 1, character: '' },
@@ -29,6 +33,10 @@ function App() {
     });
   }, []);
 
+  useEffect(() => {
+    localStorage.setItem('autoClear', JSON.stringify(autoClear));
+  }, [autoClear]);
+
   const handleSearch = () => {
     if (isMobile) {
       const length = parseInt(wordLength) || 4;
@@ -40,6 +48,9 @@ function App() {
       };
       const filtered = filterWords(words, params);
       setResults(filtered.sort((a, b) => a.length - b.length || a.localeCompare(b)));
+      if (autoClear) {
+        handleClearConstraints();
+      }
     } else {
       const params: SearchParams = {
         availableLetters: letters,
@@ -49,6 +60,9 @@ function App() {
       };
       const filtered = filterWords(words, params);
       setResults(filtered.sort((a, b) => a.length - b.length || a.localeCompare(b)));
+      if (autoClear) {
+        handleClearConstraints();
+      }
     }
   };
 
@@ -76,6 +90,11 @@ function App() {
     if (syncLengths) {
       setMinLength(String(value));
     }
+  };
+
+  const handleWordLengthChange = (value: number) => {
+    setWordLength(String(value));
+    setTimeout(() => handleSearch(), 0);
   };
 
   const handleClearAll = () => {
@@ -120,13 +139,33 @@ function App() {
           <div className="length-header">
             <h3>Word Length</h3>
             {!isMobile && (
+              <div className="length-toggles">
+                <label className="sync-toggle">
+                  <input
+                    type="checkbox"
+                    checked={syncLengths}
+                    onChange={e => setSyncLengths(e.target.checked)}
+                  />
+                  <span>Sync Min/Max</span>
+                </label>
+                <label className="sync-toggle">
+                  <input
+                    type="checkbox"
+                    checked={autoClear}
+                    onChange={e => setAutoClear(e.target.checked)}
+                  />
+                  <span>Auto Clear</span>
+                </label>
+              </div>
+            )}
+            {isMobile && (
               <label className="sync-toggle">
                 <input
                   type="checkbox"
-                  checked={syncLengths}
-                  onChange={e => setSyncLengths(e.target.checked)}
+                  checked={autoClear}
+                  onChange={e => setAutoClear(e.target.checked)}
                 />
-                <span>Sync Min/Max</span>
+                <span>Auto Clear</span>
               </label>
             )}
           </div>
@@ -171,7 +210,7 @@ function App() {
                     <button
                       key={`length-${num}`}
                       className={`btn btn-length ${wordLength === String(num) ? 'active' : ''}`}
-                      onClick={() => setWordLength(String(num))}
+                      onClick={() => handleWordLengthChange(num)}
                     >
                       {num}
                     </button>

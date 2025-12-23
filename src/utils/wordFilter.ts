@@ -28,7 +28,7 @@ export async function loadWords(): Promise<string[]> {
 export function filterWords(words: string[], params: SearchParams): string[] {
   const letters = params.availableLetters.toLowerCase().split('').filter(Boolean);
   const minLen = params.minLength || 1;
-  const maxLen = params.maxLength || 6;
+  const maxLen = params.maxLength || 10;
 
   return words.filter(word => {
     if (word.length < minLen || word.length > maxLen) return false;

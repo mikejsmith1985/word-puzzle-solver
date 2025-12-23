@@ -8,7 +8,7 @@ function App() {
   const [loading, setLoading] = useState(true);
   const [letters, setLetters] = useState('');
   const [minLength, setMinLength] = useState('3');
-  const [maxLength, setMaxLength] = useState('6');
+  const [maxLength, setMaxLength] = useState('10');
   const [wordLength, setWordLength] = useState('4');
   const [syncLengths, setSyncLengths] = useState(false);
   const [autoClear, setAutoClear] = useState(() => {
@@ -23,6 +23,10 @@ function App() {
     { position: 4, character: '' },
     { position: 5, character: '' },
     { position: 6, character: '' },
+    { position: 7, character: '' },
+    { position: 8, character: '' },
+    { position: 9, character: '' },
+    { position: 10, character: '' },
   ]);
   const [results, setResults] = useState<string[]>([]);
 
@@ -55,7 +59,7 @@ function App() {
       const params: SearchParams = {
         availableLetters: letters,
         minLength: parseInt(minLength) || 1,
-        maxLength: parseInt(maxLength) || 6,
+        maxLength: parseInt(maxLength) || 10,
         constraints: constraints.filter(c => c.character.trim()),
       };
       const filtered = filterWords(words, params);
@@ -100,7 +104,7 @@ function App() {
   const handleClearAll = () => {
     setLetters('');
     setMinLength('3');
-    setMaxLength('6');
+    setMaxLength('10');
     setWordLength('4');
     handleClearConstraints();
     setResults([]);
@@ -123,14 +127,14 @@ function App() {
 
       <div className="search-panel">
         <div className="input-section">
-          <label htmlFor="letters">Available Letters (up to 6):</label>
+          <label htmlFor="letters">Available Letters (up to 10):</label>
           <input
             id="letters"
             type="text"
             value={letters}
             onChange={e => setLetters(e.target.value.toUpperCase())}
-            placeholder="e.g., ABCDEF"
-            maxLength={6}
+            placeholder="e.g., ABCDEFGHIJ"
+            maxLength={10}
             onKeyPress={e => e.key === 'Enter' && handleSearch()}
           />
         </div>
@@ -174,7 +178,7 @@ function App() {
               <div className="length-group">
                 <label>Min Length:</label>
                 <div className="button-group-horizontal">
-                  {[3, 4, 5, 6].map(num => (
+                  {[3, 4, 5, 6, 7, 8, 9, 10].map(num => (
                     <button
                       key={`min-${num}`}
                       className={`btn btn-length ${minLength === String(num) ? 'active' : ''}`}
@@ -188,7 +192,7 @@ function App() {
               <div className="length-group">
                 <label>Max Length:</label>
                 <div className="button-group-horizontal">
-                  {[3, 4, 5, 6].map(num => (
+                  {[3, 4, 5, 6, 7, 8, 9, 10].map(num => (
                     <button
                       key={`max-${num}`}
                       className={`btn btn-length ${maxLength === String(num) ? 'active' : ''}`}
@@ -206,7 +210,7 @@ function App() {
               <div className="length-group">
                 <label>Word Length:</label>
                 <div className="button-group-horizontal">
-                  {[3, 4, 5, 6].map(num => (
+                  {[3, 4, 5, 6, 7, 8, 9, 10].map(num => (
                     <button
                       key={`length-${num}`}
                       className={`btn btn-length ${wordLength === String(num) ? 'active' : ''}`}
